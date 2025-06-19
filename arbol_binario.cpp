@@ -36,15 +36,17 @@ Arbol::Arbol(){
 }
 
 void Arbol::muestraArbol(Nodo *apnodo, int nivel){
-	//
-	if(apnodo != NULL){
-		muestraArbol(apnodo->der, nivel + 1);  // Primero mostrar el subarbol derecho
 
-		cout << setw(nivel * 5) << " " << apnodo->info << endl;  // Imprimir nodo con sangria
-
-		muestraArbol(apnodo->izq, nivel + 1);  // Luego mostrar el subarbol izquierdo
+	if (apnodo==NULL)
+		return;
+	else {
+		muestraArbol(apnodo->der,nivel+1);
+		for (int i=0;i<nivel;i++) {
+			cout<<"   ";
+		}
+		cout<<apnodo->info<<endl;
+		muestraArbol(apnodo->izq,nivel+1);
 	}
-	//
 }
 
 Nodo*  Arbol::creaArbol(){
