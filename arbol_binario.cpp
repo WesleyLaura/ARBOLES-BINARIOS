@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 using namespace std ;
 
 class Nodo{
@@ -22,6 +23,7 @@ class Arbol{
 		void preorden(Nodo* apnodo);	
 		void inorden(Nodo* apnodo);	
 		void posorden(Nodo* apnodo);
+		bool verificaArbolCompleto(Nodo* apnodo);
 		
 		int altura(Nodo *apnodo);	
 		int contarNodos(Nodo *apnodo);	
@@ -122,20 +124,25 @@ int Arbol::contarHojas(Nodo *apnodo){
 		return 0;
 	}
 	if(apnodo->izq == NULL && apnodo->der == NULL){
+		cout<<"Hoja encontrada: "<<apnodo->info<<endl;
 		return 1;
 	}
 	return contarHojas(apnodo->izq) + contarHojas(apnodo->der);
 	//
 	
 }
+//funcion que verifique si el arbol  binario esta completo
+bool Arbol::verificaArbolCompleto(Nodo* apnodo) {
+	return (contarNodos(apnodo)==(pow(2,altura(apnodo))-1)) ? true:false;
+}
 
 void menu(){
 	Arbol arbol;
 	Nodo* raiz=NULL;
-	int op;
+	int op,hoja;
 	
 	do{
-		cout<<"\n-----MENU D OPCIONES- ARBOL BINARIO-------"<<endl
+		cout<<"\n-----MENU DE OPCIONES- ARBOL BINARIO-------"<<endl
 			<<"1.- Crear arbol"<<endl
 			<<"2.- Mostrar arbol (forma estructurada)"<<endl
 			<<"3.-Recorrido en Preorden"<<endl
@@ -144,6 +151,7 @@ void menu(){
 			<<"6.-Altura del arbol"<<endl
 			<<"7.-Contar todos los nodos"<<endl
 			<<"8.- Contar nodos hoja"<<endl
+			<<"9.- Verifica si el arbol esta completo"<<endl
 			<<"0.- SALIR"<<endl;
 		cout<<"Ingrese una opcion: ";
 		cin>>op;
@@ -205,10 +213,14 @@ void menu(){
 					if(raiz==NULL){
 						cout<<"El arbol esta vacio\n";
 					}else{
-						cout<<"Cantidad de nodos hoja: "<<arbol.contarHojas(raiz)<<endl;
+						hoja=arbol.contarHojas(raiz);
+						cout<<"Cantidad de nodos hoja: "<<hoja<<endl;
 						
 					}	
 					break;
+				case 9:
+					cout<<"Esta completo ? "<<(arbol.verificaArbolCompleto(raiz) ? "SI" : "NO")<<endl;
+					break;	
 				case 0:
 					cout<<"Saliendo del programa....\n";
 					break;	
