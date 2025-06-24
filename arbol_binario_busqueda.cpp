@@ -22,7 +22,7 @@ public:
     void insertarNodo(Nodo*& apnodo, int dato);
     void insertarNodo2(Nodo*& apnodo, int dato);
     void insertarNodoIterativo(Nodo*& apnodo, int dato);
-    void busquedaABB(Nodo* apnodo, int dato);
+    bool busquedaABB(Nodo* apnodo, int dato);
     bool busquedaABB2(Nodo* apnodo, int dato);
     bool busquedaABBIterativa(Nodo* apnodo, int dato);
     void muestraArbol(Nodo* apnodo, int nivel);
@@ -197,7 +197,7 @@ void Arbol::insertarNodoIterativo(Nodo*& apnodo, int dato)
 	}
 }
 
-void Arbol::busquedaABB(Nodo* apnodo, int dato)
+bool Arbol::busquedaABB(Nodo* apnodo, int dato)
 {
     if(dato<apnodo->info){
     	if(apnodo->izq==NULL){
@@ -237,6 +237,31 @@ bool Arbol::busquedaABB2(Nodo* apnodo, int dato)
     }
 }
 
+bool Arbol::busquedaABBIterativa(Nodo* aponodo, int dato){
+	Nodo *otro,*h,*p=new Nodo();
+	otro->der=NULL;
+	otro->info=dato;
+	otro->izq=NULL;
+	if(apnodo==NULL){
+		apnodo=otro;
+	}else{
+		h=apnodo;
+		p=NULL;
+		while(h!=NULL){
+			p=h;
+				if(dato<h->info){
+					h=h->izq;
+				}else{
+					h=h->der;
+				}
+		}
+		
+		if(p->info>dato){
+			p->izq=otro;
+		}else{	
+		}
+	}
+}
 void menu(){
 	Arbol arbol;
 	Nodo *raiz= arbol.regresaRaiz();
@@ -251,6 +276,8 @@ void menu(){
 				<<"6.- Recorrido en Inorden"<<endl
 				<<"7.- Recorrido en Posorden"<<endl
 				<<"8.- Buscar dato(busquedaABB)"<<endl
+				<<"9.- Buscar dato(busquedaABB2)"<<endl
+				<<"10.- Buscar dato(busquedaIterativa)"<<endl
 				<<"9.- Altura del arbol"<<endl
 				<<"10.- Contar todos los nodos"<<endl
 				<<"11.- Contar nodos hojas"<<endl
