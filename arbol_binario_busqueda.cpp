@@ -38,6 +38,8 @@ public:
     
     void maximoArbol(Nodo* apnodo);
     void minimoArbol(Nodo* apnodo);
+    void eliminarABB(Nodo* &apnodo, int dato);
+    void removerRaiz(Nodo* apnod);
 };
 
 // constructor predeterminado
@@ -51,8 +53,7 @@ Nodo* Arbol::regresaRaiz(){
     return raiz;
 }
 //cuando el arbol tiene nodos ya creados
-void Arbol::insertarNodo(Nodo*& apnodo, int dato)
-{
+void Arbol::insertarNodo(Nodo*& apnodo, int dato){
     if(dato < apnodo->info){
         if(apnodo->izq == NULL){
             Nodo* otro = new Nodo();
@@ -270,10 +271,83 @@ void Arbol::minimoArbol(Nodo *apnodo){
 		return maximoArbol(apnodo->izq);
 	}
 }
+
+//metodo para elimnar un subarbol de un arbol binario
+void Arbol::eliminarABB(Nodo*& apnodo, int dato){
+	bool BO;
+	if(apnodo!=NULL){
+		if(dato<apnodo->info){
+			return eliminarABB(apnodo->izq, dato);
+		}else{
+			if(dato>apnodo->info){
+				return eliminarABB(apnodo->der, dato);
+			}else{
+				Nodo* otro,*AUX, *AUX1=new Nodo();
+				otro=apnodo;
+				if(otro->der==NULL){
+					apnodo=otro->izq;
+				}else{
+					if(otro->izq==NULL){
+						apnodo=otro->der;
+					}else{
+						AUX=apnodo->izq;
+						BO=false;
+						while(AUX->der!=NULL){
+							AUX1=AUX;
+							AUX=AUX->der;
+							BO=true;
+						}
+						apnodo->info=AUX->info;
+						otro=AUX;
+							if(BO){
+								AUX1->der=AUX->izq;
+							}else{
+								apnodo->izq=AUX->izq;
+							}
+					}
+					delete(otro);
+				}
+			}
+		}
+		
+	}else{
+		cout<<"La informacion a eliminar no se encuentra en el arbol\n";
+		return;
+	}
+}
+
+//funcion independiente de remover raiz
+Nodo* removerRaiz(Nodo* raizActual) {
+    Nodo *padre, *reemplazo;
+    if (raizActual == NULL) return NULL;
+
+    if (raizActual->izq == NULL) {
+        reemplazo = raizActual->der;
+        delete raizActual;
+        return reemplazo;
+    }
+
+    padre = raizActual;
+    reemplazo = raizActual->izq;
+
+    while (reemplazo->der != NULL) {
+        padre = reemplazo;
+        reemplazo = reemplazo->der;
+    }
+
+    if (padre != raizActual) {
+        padre->der = reemplazo->izq;
+        reemplazo->izq = raizActual->izq;
+    }
+
+    reemplazo->der = raizActual->der;
+    delete raizActual;
+    return reemplazo;
+}
 void menu(){
 	Arbol arbol;
-	//Nodo *raiz= arbol.regresaRaiz();
-	Nodo *raiz=NULL;
+	Nodo *raiz= arbol.regresaRaiz();
+	//Nodo *raiz=NULL;
 	int op, dato;
 		do{
 			system("cls");
@@ -293,6 +367,8 @@ void menu(){
 				<<"13.- Contar nodos hojas"<<endl
 				<<"14.- Maximo valor"<<endl
 				<<"15.- Minimo Valor"<<endl
+				<<"16.- EliminarABB"<<endl
+				<<"17.- Remover Raiz"<<endl
 				<<"SALIR"<<endl;
 			cout<<"Ingrese la opcion: "; cin>>op;
 			
@@ -420,6 +496,23 @@ void menu(){
 					case 15:
 						system("cls");
 						arbol.minimoArbol(raiz);
+						system("pause")	;
+						break;		
+					case 16:
+						system("cls");
+						cout<<"Ingrese el dato a eliminar: ";
+						cin>>dato;
+						arbol.eliminarABB(raiz,dato);
+						system("pause")	;
+						break;		
+					case 17:
+						system("cls");
+						if(raiz==NULL){
+							cout<<"Arbol binario vacio\n";
+						}else{
+							raiz=removerRaiz(raiz);
+							cout<<"Raiz removida correctamente\n";
+						}
 						system("pause")	;
 						break;		
 					case 0:
