@@ -18,7 +18,7 @@ private:
 public:
     Arbol(); // constructor
 
-    Nodo* regresaRaiz();
+    Nodo*& regresaRaiz();
     void insertarNodo(Nodo*& apnodo, int dato);
     void insertarNodo2(Nodo*& apnodo, int dato);
     void insertarNodoIterativo(Nodo*& apnodo, int dato);
@@ -39,7 +39,7 @@ public:
     void maximoArbol(Nodo* apnodo);
     void minimoArbol(Nodo* apnodo);
     void eliminarABB(Nodo* &apnodo, int dato);
-    void removerRaiz(Nodo* apnod);
+    void podarArbol(Nodo*&apnodo);
 };
 
 // constructor predeterminado
@@ -49,7 +49,7 @@ Arbol::Arbol()
 }
 
 // regresa el apuntador a la raiz
-Nodo* Arbol::regresaRaiz(){
+Nodo*& Arbol::regresaRaiz(){
     return raiz;
 }
 //cuando el arbol tiene nodos ya creados
@@ -344,9 +344,20 @@ Nodo* removerRaiz(Nodo* raizActual) {
     delete raizActual;
     return reemplazo;
 }
+
+//funcion que elimine todos los nodos del arbol
+void Arbol::podarArbol(Nodo*& apnodo){
+	if(apnodo!=NULL){
+		podarArbol(apnodo->izq);
+		podarArbol(apnodo->der);
+		delete apnodo;
+		apnodo=NULL;
+	}
+	
+}
 void menu(){
 	Arbol arbol;
-	Nodo *raiz= arbol.regresaRaiz();
+	Nodo *&raiz= arbol.regresaRaiz();
 	//Nodo *raiz=NULL;
 	int op, dato;
 		do{
@@ -369,6 +380,7 @@ void menu(){
 				<<"15.- Minimo Valor"<<endl
 				<<"16.- EliminarABB"<<endl
 				<<"17.- Remover Raiz"<<endl
+				<<"18.- Podar Arbol(eliminar todo los nodos)"<<endl
 				<<"SALIR"<<endl;
 			cout<<"Ingrese la opcion: "; cin>>op;
 			
@@ -513,6 +525,12 @@ void menu(){
 							raiz=removerRaiz(raiz);
 							cout<<"Raiz removida correctamente\n";
 						}
+						system("pause")	;
+						break;		
+					case 18:
+						system("cls");
+							arbol.podarArbol(raiz);
+							cout<<"ELIMINADOS CORRECTAMENTE\n";
 						system("pause")	;
 						break;		
 					case 0:
