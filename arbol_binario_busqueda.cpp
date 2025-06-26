@@ -22,9 +22,9 @@ public:
     void insertarNodo(Nodo*& apnodo, int dato);
     void insertarNodo2(Nodo*& apnodo, int dato);
     void insertarNodoIterativo(Nodo*& apnodo, int dato);
-    bool busquedaABB(Nodo* apnodo, int dato);
+    void busquedaABB(Nodo* apnodo, int dato);
     bool busquedaABB2(Nodo* apnodo, int dato);
-    bool busquedaABBIterativa(Nodo* apnodo, int dato);
+    void busquedaABBIterativa(Nodo* apnodo, int dato);
     void muestraArbol(Nodo* apnodo, int nivel);
 
     // Metodos de recorrido
@@ -35,6 +35,9 @@ public:
     int altura(Nodo* apnodo);
     int contarNodos(Nodo* apnodo);
     int contarHojas(Nodo* apnodo);
+    
+    void maximoArbol(Nodo* apnodo);
+    void minimoArbol(Nodo* apnodo);
 };
 
 // constructor predeterminado
@@ -169,8 +172,7 @@ void Arbol::insertarNodo2(Nodo*& apnodo, int dato)
 	}
 }
 
-void Arbol::insertarNodoIterativo(Nodo*& apnodo, int dato)
-{
+void Arbol::insertarNodoIterativo(Nodo*& apnodo, int dato){
     Nodo *otro=new Nodo();
     otro->info=dato;
     otro->der=NULL;
@@ -196,9 +198,8 @@ void Arbol::insertarNodoIterativo(Nodo*& apnodo, int dato)
 		}
 	}
 }
-
-bool Arbol::busquedaABB(Nodo* apnodo, int dato)
-{
+//busqueda modo recursiva cuando tiene subarboles
+void Arbol::busquedaABB(Nodo* apnodo, int dato){
     if(dato<apnodo->info){
     	if(apnodo->izq==NULL){
     		cout<<"La informacion no se encuentra en el arbol\n";
@@ -217,7 +218,7 @@ bool Arbol::busquedaABB(Nodo* apnodo, int dato)
 		}	
 	}
 }
-
+//modo de busqueda recursiva, valida tambien si el arbol binario esta vacia
 bool Arbol::busquedaABB2(Nodo* apnodo, int dato)
 {
     if(apnodo != NULL){
@@ -236,37 +237,46 @@ bool Arbol::busquedaABB2(Nodo* apnodo, int dato)
         return false;
     }
 }
-
-bool Arbol::busquedaABBIterativa(Nodo* aponodo, int dato){
-	Nodo *otro,*h,*p=new Nodo();
-	otro->der=NULL;
-	otro->info=dato;
-	otro->izq=NULL;
-	if(apnodo==NULL){
-		apnodo=otro;
+//modo de busqueda iterativa
+void Arbol::busquedaABBIterativa(Nodo* apnodo, int dato){
+	while(apnodo!= NULL && apnodo->info!=dato){
+		if(apnodo->info>dato){
+			apnodo=apnodo->izq;
+		}else{
+			apnodo=apnodo->der;
+		}
+	}
+	
+	if(apnodo!=NULL){
+		cout<<"La informacion se encuentra en el arbol\n";
 	}else{
-		h=apnodo;
-		p=NULL;
-		while(h!=NULL){
-			p=h;
-				if(dato<h->info){
-					h=h->izq;
-				}else{
-					h=h->der;
-				}
-		}
-		
-		if(p->info>dato){
-			p->izq=otro;
-		}else{	
-		}
+		cout<<"La informacion No se encuentra en el arbol\n";
+	}
+}
+
+//metodo para hallar el maximo subarbvol de un arbol binario
+void Arbol::maximoArbol(Nodo* apnodo){
+	if(apnodo->der==NULL){
+		cout<<"VALOR MAXIMO: "<<apnodo->info<<endl;
+	}else{
+		return maximoArbol(apnodo->der);
+	}
+}
+
+void Arbol::minimoArbol(Nodo *apnodo){
+	if(apnodo->izq==NULL){
+		cout<<"VALOR MINIMO: "<<apnodo->info<<endl;
+	}else{
+		return maximoArbol(apnodo->izq);
 	}
 }
 void menu(){
 	Arbol arbol;
-	Nodo *raiz= arbol.regresaRaiz();
+	//Nodo *raiz= arbol.regresaRaiz();
+	Nodo *raiz=NULL;
 	int op, dato;
 		do{
+			system("cls");
 			cout<<"\tMENU DE OPCIONES - ARBOLES BINARIO"<<endl
 				<<"1.- Insertar nodo (insertaNodo)"<<endl
 				<<"2.- Insertar nodo (insertaNodo2)"<<endl
@@ -278,14 +288,17 @@ void menu(){
 				<<"8.- Buscar dato(busquedaABB)"<<endl
 				<<"9.- Buscar dato(busquedaABB2)"<<endl
 				<<"10.- Buscar dato(busquedaIterativa)"<<endl
-				<<"9.- Altura del arbol"<<endl
-				<<"10.- Contar todos los nodos"<<endl
-				<<"11.- Contar nodos hojas"<<endl
+				<<"11.- Altura del arbol"<<endl
+				<<"12.- Contar todos los nodos"<<endl
+				<<"13.- Contar nodos hojas"<<endl
+				<<"14.- Maximo valor"<<endl
+				<<"15.- Minimo Valor"<<endl
 				<<"SALIR"<<endl;
 			cout<<"Ingrese la opcion: "; cin>>op;
 			
 				switch(op){
 					case 1:
+						system("cls");
 						cout<<"Ingrese dato a insertar (insertarNodo): ";
 						cin>>dato;
 						if(raiz==NULL){
@@ -293,24 +306,32 @@ void menu(){
 						}else{
 							arbol.insertarNodo(raiz,dato);
 						}
-						break;
+						system("pause")
+;						break;
 					case 2:
+						system("cls");
 						cout<<"Ingrese dato a insertar (insertaNodo2): ";
 						cin>>dato;
 						arbol.insertarNodo2(raiz,dato);
+						system("pause");
 						break;
 					case 3:
+						system("cls");
 						cout<<"Ingrese dato a insertar (insertarNodoIterativo): ";
 						cin>>dato;
 						arbol.insertarNodoIterativo(raiz,dato);
+						system("pause");
 						break;	
 					case 4:
+						system("cls");
 						if(raiz==NULL)
 						cout<<"El arbol esta vacia\n";
 						else
 							arbol.muestraArbol(raiz,0);
+							system("pause");
 						 break;
 					case 5:
+						system("cls");
 						if(raiz==NULL)
 						cout<<"El arbol esta vacia\n";
 						else{
@@ -318,8 +339,10 @@ void menu(){
 							arbol.preorden(raiz);
 							cout<<endl;
 						}
+						system("pause");
 						break;
 					case 6:
+						system("cls");
 						if(raiz==NULL)
 						cout<<"El arbol esta vacia\n";
 						else{
@@ -327,8 +350,10 @@ void menu(){
 							arbol.inorden(raiz);
 							cout<<endl;
 						}
+						system("pause");
 						break;
 					case 7:
+						system("cls");
 						if(raiz==NULL)
 						cout<<"El arbol esta vacia\n";
 						else{
@@ -336,27 +361,67 @@ void menu(){
 							arbol.posorden(raiz);
 							cout<<endl;
 						}
+						system("pause");
 						break;
 					case 8:
+						system("cls");
+						cout<<"Ingrese el dato a buscar: ";
+						cin>>dato;
+						arbol.busquedaABB(raiz,dato);
+						system("pause");
+						break;
+					case 9:
+						system("cls");
 						cout<<"Ingrese el dato a buscar: ";
 						cin>>dato;
 						if(arbol.busquedaABB2(raiz,dato))
 							cout<<"Dato encontrado en el arbol.\n";
 						else
 							cout<<"Dato NO encontrado.\n";
-						break;			
-					case 9:
+							system("pause");
+						break;
+					case 10:
+						system("cls");
+						cout<<"Ingrese el dato a buscar: ";
+						cin>>dato;
+						arbol.busquedaABBIterativa(raiz,dato);
+						system("pause");
+						break;
+										
+					case 11:
+						system("cls");
 						if(raiz==NULL)
 							cout<<"El arbol esta vacio.\n";
 						else
 							cout<<"Altura del arbol: "<<arbol.altura(raiz)<<endl;
+							system("pause");
 						break;
-					case 10:
+					case 12:
+						system("cls");
 						if(raiz==NULL)
 							cout<<"El arbol esta vacio.\n";
 						else
-							cout<<"Cantidad total de nodos: "<<arbol.contarHojas(raiz)<<endl;
+							cout<<"Cantidad total de nodos: "<<arbol.contarNodos(raiz)<<endl;
+							system("pause");
+						break;
+					case  13:
+						system("cls");
+						if(raiz==NULL)
+							cout<<"El arbol esta vacio.\n";
+						else
+							cout<<"Cantidad total de nodos HOJA: "<<arbol.contarHojas(raiz)<<endl;
+							system("pause");
 						break;	
+					case 14:
+						system("cls");
+						arbol.maximoArbol(raiz);
+						system("pause");
+						break;		
+					case 15:
+						system("cls");
+						arbol.minimoArbol(raiz);
+						system("pause")	;
+						break;		
 					case 0:
 						cout<<"Saliendo del programa....\n";
 						break;
